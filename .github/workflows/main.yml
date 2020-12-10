@@ -1,0 +1,87 @@
+# This is a basic workflow to help you get started with Actions
+
+name: dnstwist-tester
+
+# Controls when the action will run. 
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ main ]
+
+  schedule:
+    - cron:  '0 0 * * *'
+
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  check-dnstwists:
+    strategy:
+      matrix:
+        domain: [uni-bonn.de,fbs-bna.de]
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check ${{ matrix.domain }} with dnstwist
+        uses: docker://elceef/dnstwist
+        with:
+          entrypoint: /opt/dnstwist/dnstwist.py
+          args: --registered --mxcheck --geoip --whois --ssdeep --tld /opt/dnstwist/dictionaries/common_tlds.dict --format csv --output ${{ matrix.domain }}.csv ${{ matrix.domain }}
+      
+      - name: Sort CSV of ${{ matrix.domain }} for stable ordering
+        run: |
+          cat ${{ matrix.domain }}.csv | (read -r; printf "%s\n" "$REPLY"; read -r; printf "%s\n" "$REPLY"; sort --field-separator=, --key=2) > ${{ matrix.domain }}-sorted.csv
+      
+      - name: Prepare HTML for ${{ matrix.domain }}
+        run: |
+          TITLE="Test of \"${{ matrix.domain }}\", last updated at $(date)"
+          echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">' >> ${{ matrix.domain }}.html
+          echo '<html>' >> ${{ matrix.domain }}.html
+          echo '<head>' >> ${{ matrix.domain }}.html
+          echo '<link rel="stylesheet" href="style.css">' >> ${{ matrix.domain }}.html
+          echo "<title>${TITLE}</title></head>" >> ${{ matrix.domain }}.html
+          echo "<body><h2>${TITLE}</h2>" >> ${{ matrix.domain }}.html
+          echo '<table id="dnstwist-results">' >> ${{ matrix.domain }}.html
+          FIRST=1
+          while read INPUT ; do
+            if [ $FIRST -eq 1 ]; then
+              echo "<tr><th>${INPUT//,/</th><th>}</th></tr>" >> ${{ matrix.domain }}.html
+              FIRST=0
+            else
+              echo "<tr><td>${INPUT//,/</td><td>}</td></tr>" >> ${{ matrix.domain }}.html
+            fi
+          done < ${{ matrix.domain }}-sorted.csv ;
+          echo "</table>" >> ${{ matrix.domain }}.html
+          echo '</body></html>' >> ${{ matrix.domain }}.html
+
+      - name: Upload artifacts for ${{ matrix.domain }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.domain }}
+          path: ${{ matrix.domain }}*.*
+          retention-days: 2
+
+  deploy-pages:
+    needs: check-dnstwists
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Download all workflow run artifacts
+        uses: actions/download-artifact@v2
+      
+      - name: Move HTML files and style file
+        run: |
+          mkdir html
+          mv */*.html html/
+          cp style.css html/
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./html
+          
+          
