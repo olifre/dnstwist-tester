@@ -7,8 +7,8 @@ th, td {
 }
 th {
   background-color: #A9A9A9;
-  color: #FFF;
+  color: #000;
 }
-table tr td:nth-child(2) {
-    background: #ccc;
+table tr:nth-child(odd) {
+    background: #CCC;
 }
