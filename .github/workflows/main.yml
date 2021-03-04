@@ -8,6 +8,8 @@ on:
   # see below.
   push:
 
+  pull_request:
+
   schedule:
     - cron:  '0 0 * * *'
 
@@ -128,7 +130,7 @@ jobs:
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
-        if: endsWith(github.event.ref, '/main')
+        if: github.event_name == 'push' && endsWith(github.event.ref, '/main')
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./html
