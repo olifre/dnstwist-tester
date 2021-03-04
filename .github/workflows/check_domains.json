@@ -1,0 +1,10 @@
+[
+ {
+   "domain": "uni-bonn.de",
+   "args": "--registered --mxcheck --geoip --whois --ssdeep --tld /opt/dnstwist/dictionaries/common_tlds.dict"
+ },
+ {
+   "domain": "fbs-bna.de",
+   "args": "--registered --mxcheck --geoip --whois --ssdeep --tld /opt/dnstwist/dictionaries/common_tlds.dict"
+ }
+]

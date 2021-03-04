@@ -15,10 +15,30 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  collect-domains:
+    runs-on: ubuntu-latest
+    outputs:
+      check_domains: ${{ steps.read-json.outputs.CHECK_DOMAINS }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Read from JSON
+        id: read-json
+        shell: bash
+        run: |
+          CHECK_DOMAINS="$(cat .github/workflows/check_domains.json)"
+          # See https://github.community/t/set-output-truncates-multiline-strings/16852/3
+          CHECK_DOMAINS="${CHECK_DOMAINS//'%'/'%25'}"
+          CHECK_DOMAINS="${CHECK_DOMAINS//$'\n'/'%0A'}"
+          CHECK_DOMAINS="${CHECK_DOMAINS//$'\r'/'%0D'}"
+          echo $CHECK_DOMAINS
+          echo "::set-output name=CHECK_DOMAINS::$CHECK_DOMAINS"
+
   check-dnstwists:
+    needs: [ collect-domains ]
     strategy:
       matrix:
-        domain: [uni-bonn.de,fbs-bna.de]
+        include: ${{ fromJson(needs.collect-domains.outputs.check_domains) }}
 
     runs-on: ubuntu-latest
 
@@ -27,7 +47,7 @@ jobs:
         uses: docker://elceef/dnstwist
         with:
           entrypoint: /opt/dnstwist/dnstwist.py
-          args: --registered --mxcheck --geoip --whois --ssdeep --tld /opt/dnstwist/dictionaries/common_tlds.dict --format csv --output ${{ matrix.domain }}.csv ${{ matrix.domain }}
+          args: ${{ matrix.args }} --format csv --output ${{ matrix.domain }}.csv ${{ matrix.domain }}
       
       - name: Sort CSV of ${{ matrix.domain }} for stable ordering
         run: |
