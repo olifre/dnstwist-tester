@@ -91,11 +91,39 @@ jobs:
 
       - name: Download all workflow run artifacts
         uses: actions/download-artifact@v2
+
+      - name: Create a merged HTML
+        run: |
+          TITLE="dnstwist-tester results, last updated at $(date)"
+          echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">' >> index.html
+          echo '<html>' >> index.html
+          echo '<head>' >> index.html
+          echo '<link rel="stylesheet" href="style.css">' >> index.html
+          echo "<title>${TITLE}</title></head>" >> index.html
+          for domainData in */*-sorted.csv; do
+            fileBase=$(basename $domainData)
+            DOMAIN_NAME=${fileBase%-sorted.csv}
+            echo "<body><h2><a href=\"${DOMAIN_NAME}.html\">${DOMAIN_NAME}</a>: ${TITLE}</h2>" >> index.html
+            echo '<table id="dnstwist-results">' >> index.html
+            FIRST=1
+            while read INPUT ; do
+              if [ $FIRST -eq 1 ]; then
+                echo "<tr><th>${INPUT//,/</th><th>}</th></tr>" >> index.html
+                FIRST=0
+              else
+                echo "<tr><td>${INPUT//,/</td><td>}</td></tr>" >> index.html
+              fi
+            done < $domainData ;
+            echo "</table>" >> index.html
+          done
+          echo '</body></html>' >> index.html
+          cat index.html
       
       - name: Move HTML files and style file
         run: |
           mkdir html
           mv */*.html html/
+          mv index.html html/
           cp style.css html/
 
       - name: Deploy
