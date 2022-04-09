@@ -78,7 +78,7 @@ jobs:
           echo '</body></html>' >> ${{ matrix.domain }}.html
 
       - name: Upload artifacts for ${{ matrix.domain }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.domain }}
           path: ${{ matrix.domain }}*.*
