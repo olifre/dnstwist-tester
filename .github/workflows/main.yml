@@ -46,10 +46,18 @@ jobs:
 
     steps:
       - name: Check ${{ matrix.domain }} with dnstwist
+        id: dnstwistcheck
         uses: docker://elceef/dnstwist
         with:
           entrypoint: /opt/dnstwist/dnstwist.py
           args: ${{ matrix.args }} --format csv --output ${{ matrix.domain }}.csv ${{ matrix.domain }}
+
+      - name: Failure, verbose inline check of ${{ matrix.domain }} with dnstwist
+        if: ${{ failure() && steps.dnstwistcheck.conclusion == 'failure' }}
+        uses: docker://elceef/dnstwist
+        with:
+          entrypoint: /opt/dnstwist/dnstwist.py
+          args: ${{ matrix.args }} ${{ matrix.domain }}
 
       - name: Sort CSV of ${{ matrix.domain }} for stable ordering
         run: |
