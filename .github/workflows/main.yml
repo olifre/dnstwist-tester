@@ -50,11 +50,11 @@ jobs:
         with:
           entrypoint: /opt/dnstwist/dnstwist.py
           args: ${{ matrix.args }} --format csv --output ${{ matrix.domain }}.csv ${{ matrix.domain }}
-      
+
       - name: Sort CSV of ${{ matrix.domain }} for stable ordering
         run: |
           cat ${{ matrix.domain }}.csv | (read -r; printf "%s\n" "$REPLY"; read -r; printf "%s\n" "$REPLY"; sort --field-separator=, --key=2) > ${{ matrix.domain }}-sorted.csv
-      
+
       - name: Prepare HTML for ${{ matrix.domain }}
         run: |
           TITLE="Test of \"${{ matrix.domain }}\", last updated at $(date)"
@@ -124,7 +124,7 @@ jobs:
           done
           echo '</body></html>' >> index.html
           cat index.html
-      
+
       - name: Move HTML files and style file
         run: |
           mkdir html
