@@ -46,6 +46,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
       - name: Check ${{ matrix.domain }} with dnstwist
         id: dnstwistcheck
         uses: docker://elceef/dnstwist
@@ -63,9 +66,6 @@ jobs:
       - name: Sort CSV of ${{ matrix.domain }} for stable ordering
         run: |
           cat ${{ matrix.domain }}.csv | (read -r; printf "%s\n" "$REPLY"; read -r; printf "%s\n" "$REPLY"; sort --field-separator=, --key=2) > ${{ matrix.domain }}-sorted.csv
-
-      - name: Checkout repository
-        uses: actions/checkout@v3
 
       - name: Install dependencies for CSV parsing
         run: |
@@ -96,11 +96,11 @@ jobs:
     needs: check-dnstwists
     runs-on: ubuntu-latest
     steps:
-      - name: Download all workflow run artifacts
-        uses: actions/download-artifact@v3
-
       - name: Checkout repository
         uses: actions/checkout@v3
+
+      - name: Download all workflow run artifacts
+        uses: actions/download-artifact@v3
 
       - name: Install dependencies for CSV parsing
         run: |
