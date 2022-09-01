@@ -12,5 +12,13 @@ th {
   color: #000;
 }
 table tr:nth-child(odd) {
-    background: #CCC;
+  background: #CCC;
+}
+thead {
+  border-top: 2px solid black;
+  border-bottom: 2px solid black;
+}
+tbody {
+  border-top: 2px solid black;
+  border-bottom: 2px solid black;
 }
