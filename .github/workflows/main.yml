@@ -63,6 +63,10 @@ jobs:
         run: |
           cat ${{ matrix.domain }}.csv | (read -r; printf "%s\n" "$REPLY"; read -r; printf "%s\n" "$REPLY"; sort --field-separator=, --key=2) > ${{ matrix.domain }}-sorted.csv
 
+      - name: Install dependencies for CSV parsing
+        run: |
+          sudo apt-get -y install python3-csvkit
+
       - name: Prepare HTML for ${{ matrix.domain }}
         run: |
           TITLE="Test of \"${{ matrix.domain }}\", last updated at $(date)"
@@ -73,15 +77,7 @@ jobs:
           echo "<title>${TITLE}</title></head>" >> ${{ matrix.domain }}.html
           echo "<body><h2>${TITLE}</h2>" >> ${{ matrix.domain }}.html
           echo '<table id="dnstwist-results">' >> ${{ matrix.domain }}.html
-          FIRST=1
-          while read INPUT ; do
-            if [ $FIRST -eq 1 ]; then
-              echo "<tr><th>${INPUT//,/</th><th>}</th></tr>" >> ${{ matrix.domain }}.html
-              FIRST=0
-            else
-              echo "<tr><td>${INPUT//,/</td><td>}</td></tr>" >> ${{ matrix.domain }}.html
-            fi
-          done < ${{ matrix.domain }}-sorted.csv ;
+          python3 ./make_table.py ${{ matrix.domain }}-sorted.csv >> ${{ matrix.domain }}.html
           echo "</table>" >> ${{ matrix.domain }}.html
           echo '</body></html>' >> ${{ matrix.domain }}.html
 
@@ -102,6 +98,10 @@ jobs:
       - name: Download all workflow run artifacts
         uses: actions/download-artifact@v3
 
+      - name: Install dependencies for CSV parsing
+        run: |
+          sudo apt-get -y install python3-csvkit
+
       - name: Create a merged HTML
         run: |
           TITLE="dnstwist-tester results, last updated at $(date)"
@@ -119,15 +119,7 @@ jobs:
             DOMAIN_NAME=${fileBase%-sorted.csv}
             echo "<h2><a href=\"${DOMAIN_NAME}.html\">${DOMAIN_NAME}</a></h2>" >> index.html
             echo '<table id="dnstwist-results">' >> index.html
-            FIRST=1
-            while read INPUT ; do
-              if [ $FIRST -eq 1 ]; then
-                echo "<tr><th>${INPUT//,/</th><th>}</th></tr>" >> index.html
-                FIRST=0
-              else
-                echo "<tr><td>${INPUT//,/</td><td>}</td></tr>" >> index.html
-              fi
-            done < $domainData ;
+            python3 ./make_table.py $domainData >> index.html
             echo "</table>" >> index.html
           done
           echo '</body></html>' >> index.html
