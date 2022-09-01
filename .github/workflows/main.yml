@@ -77,6 +77,7 @@ jobs:
           echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">' >> ${{ matrix.domain }}.html
           echo '<html>' >> ${{ matrix.domain }}.html
           echo '<head>' >> ${{ matrix.domain }}.html
+          echo '<meta name="viewport" content="width=device-width, initial-scale=1" />' >> ${{ matrix.domain }}.html
           echo '<link rel="stylesheet" href="style.css">' >> ${{ matrix.domain }}.html
           echo "<title>${TITLE}</title></head>" >> ${{ matrix.domain }}.html
           echo "<body><h2>${TITLE}</h2>" >> ${{ matrix.domain }}.html
@@ -112,6 +113,7 @@ jobs:
           echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">' >> index.html
           echo '<html>' >> index.html
           echo '<head>' >> index.html
+          echo '<meta name="viewport" content="width=device-width, initial-scale=1" />' >> index.html
           echo '<link rel="stylesheet" href="style.css">' >> index.html
           echo "<title>${TITLE}</title></head>" >> index.html
           echo "<body>" >> index.html
