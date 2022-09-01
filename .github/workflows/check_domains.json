@@ -1,18 +1,18 @@
 [
  {
    "domain": "uni-bonn.de",
-   "args": "--registered --mxcheck --geoip --whois --ssdeep --tld /opt/dnstwist/dictionaries/common_tlds.dict"
+   "args": "--registered --all --banners --mxcheck --geoip --whois --ssdeep --tld /opt/dnstwist/dictionaries/common_tlds.dict"
  },
  {
    "domain": "universitaet-bonn.de",
-   "args": "--registered --mxcheck --geoip --whois --tld /opt/dnstwist/dictionaries/common_tlds.dict"
+   "args": "--registered --all --banners --mxcheck --geoip --whois --tld /opt/dnstwist/dictionaries/common_tlds.dict"
  },
  {
    "domain": "sciebo.de",
-   "args": "--registered --mxcheck --geoip --whois --ssdeep --tld /opt/dnstwist/dictionaries/common_tlds.dict"
+   "args": "--registered --all --banners --mxcheck --geoip --whois --ssdeep --tld /opt/dnstwist/dictionaries/common_tlds.dict"
  },
  {
    "domain": "fbs-bna.de",
-   "args": "--registered --mxcheck --geoip --whois --ssdeep --tld /opt/dnstwist/dictionaries/common_tlds.dict"
+   "args": "--registered --all --banners --mxcheck --geoip --whois --ssdeep --tld /opt/dnstwist/dictionaries/common_tlds.dict"
  }
 ]
