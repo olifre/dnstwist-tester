@@ -8,8 +8,14 @@ if len(sys.argv) != 2:
 
 with open(sys.argv[1], 'rt') as csvfile:
   reader = csv.reader(csvfile, quotechar='"')
-  rowc = 0
-  for row in reader:
+  total_rows = sum(1 for row in reader)
+  csvfile.seek(0)
+  reader = csv.reader(csvfile, quotechar='"')
+  for rowc, row in enumerate(reader):
+    if (rowc == 0):
+      print("<thead>")
+    elif (rowc == 1):
+      print("<tbody>")
     print("<tr>", end="")
     if (rowc == 0):
       for col in row:
@@ -18,4 +24,7 @@ with open(sys.argv[1], 'rt') as csvfile:
       for col in row:
         print("<td>{}</td>".format(col), end="")
     print("</tr>")
-    rowc += 1
+    if (rowc == 0):
+      print("</thead>")
+    elif (rowc == total_rows-1):
+      print("</tbody>")
