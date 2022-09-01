@@ -24,6 +24,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+
       - name: Read from JSON
         id: read-json
         shell: bash
@@ -63,6 +64,9 @@ jobs:
         run: |
           cat ${{ matrix.domain }}.csv | (read -r; printf "%s\n" "$REPLY"; read -r; printf "%s\n" "$REPLY"; sort --field-separator=, --key=2) > ${{ matrix.domain }}-sorted.csv
 
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
       - name: Install dependencies for CSV parsing
         run: |
           sudo apt-get -y install python3-csvkit
@@ -92,11 +96,11 @@ jobs:
     needs: check-dnstwists
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
       - name: Download all workflow run artifacts
         uses: actions/download-artifact@v3
+
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
       - name: Install dependencies for CSV parsing
         run: |
