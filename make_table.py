@@ -23,7 +23,12 @@ argparser.add_argument('csvfile',
 
 args = argparser.parse_args()
 
-check_screenshots = (args.screenshot_dir and os.path.isdir(args.screenshot_dir))
+check_screenshots = False
+if args.screenshot_dir:
+  if os.path.isdir(args.screenshot_dir):
+    check_screenshots = True
+  else:
+    print("error: screenshot directory {} not accessible, ignoring that!".format(args.screenshot_dir), file=sys.stderr)
 
 with open(args.csvfile, 'rt') as csvfile:
   reader = csv.reader(csvfile, quotechar='"')
