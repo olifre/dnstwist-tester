@@ -85,8 +85,8 @@ jobs:
           cp ${{ matrix.domain }}.html ${{ matrix.domain }}-stable.html
           python3 ./make_table.py ${{ matrix.domain }}-sorted.csv >> ${{ matrix.domain }}.html
           python3 ./make_table.py -f ${{ matrix.domain }}-sorted.csv >> ${{ matrix.domain }}-stable.html
-          echo "</table>" | tee -a ${{ matrix.domain }}.html ${{ matrix.domain }}-stable.html
-          echo '</body></html>' | tee -a ${{ matrix.domain }}.html ${{ matrix.domain }}-stable.html
+          echo "</table>" | tee -a ${{ matrix.domain }}.html ${{ matrix.domain }}-stable.html > /dev/null
+          echo '</body></html>' | tee -a ${{ matrix.domain }}.html ${{ matrix.domain }}-stable.html > /dev/null
 
       - name: Upload artifacts for ${{ matrix.domain }}
         uses: actions/upload-artifact@v3
@@ -126,13 +126,13 @@ jobs:
           for domainData in */*-sorted.csv; do
             fileBase=$(basename $domainData)
             DOMAIN_NAME=${fileBase%-sorted.csv}
-            echo "<h2><a href=\"${DOMAIN_NAME}.html\">${DOMAIN_NAME}</a></h2>" | tee -a index.html index-stable.html
-            echo '<table id="dnstwist-results">' | tee -a index.html index-stable.html
+            echo "<h2><a href=\"${DOMAIN_NAME}.html\">${DOMAIN_NAME}</a></h2>" | tee -a index.html index-stable.html > /dev/null
+            echo '<table id="dnstwist-results">' | tee -a index.html index-stable.html > /dev/null
             python3 ./make_table.py $domainData >> index.html
             python3 ./make_table.py -f $domainData >> index-stable.html
-            echo "</table>" | tee -a index.html index-stable.html
+            echo "</table>" | tee -a index.html index-stable.html > /dev/null
           done
-          echo '</body></html>' | tee -a index.html index-stable.html
+          echo '</body></html>' | tee -a index.html index-stable.html > /dev/null
           echo "This is index.html:"
           cat index.html
           echo "This is index-stable.html:"
