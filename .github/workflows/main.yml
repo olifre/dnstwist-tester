@@ -123,6 +123,8 @@ jobs:
           echo "<p>This page contains a list of domains checked with <a href=\"https://github.com/elceef/dnstwist\">dnstwist</a> at least daily via GitHub actions.</p>" >> index.html
           echo "<p>To get a domain added, open an issue / PR against the <a href=\"https://github.com/olifre/dnstwist-tester\">GitHub repo</a>.</p>" >> index.html
           cp index.html index-stable.html
+          echo "<p>In case you want to watch this page for changes, it's recommended to use <a href=\"index-stable.html\">the stable index</a> instead, which has some unstable fields filtered out (e.g. banners, ssdeep).</p>" >> index.html
+          echo "<p>This is the index page with some unstable fields filtered out. You may want to check <a href=\"index.html\">the full index</a> instead, which contains all fields.</p>" >> index-stable.html
           for domainData in */*-sorted.csv; do
             fileBase=$(basename $domainData)
             DOMAIN_NAME=${fileBase%-sorted.csv}
