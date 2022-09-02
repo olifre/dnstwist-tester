@@ -4,7 +4,7 @@
    "args": "--registered --all --banners --mxcheck --geoip --whois --ssdeep --tld /opt/dnstwist/dictionaries/common_tlds.dict"
  },
  {
-   "domain": "universitaet-bonn.de",
+   "domain": "www.universitaet-bonn.de",
    "args": "--registered --all --banners --mxcheck --geoip --whois --tld /opt/dnstwist/dictionaries/common_tlds.dict"
  },
  {
