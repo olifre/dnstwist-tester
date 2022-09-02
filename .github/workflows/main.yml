@@ -81,8 +81,10 @@ jobs:
           echo '<link rel="stylesheet" href="style.css">' >> ${{ matrix.domain }}.html
           echo "<title>${TITLE}</title></head>" >> ${{ matrix.domain }}.html
           echo "<body><h2>${TITLE}</h2>" >> ${{ matrix.domain }}.html
-          echo '<table id="dnstwist-results">' >> ${{ matrix.domain }}.html
           cp ${{ matrix.domain }}.html ${{ matrix.domain }}-stable.html
+          echo "<p><a href=\"index.html\">back to the index</a></p>" >> ${{ matrix.domain }}.html
+          echo "<p><a href=\"index-stable.html\">back to the index</a></p>" >> ${{ matrix.domain }}.html
+          echo '<table id="dnstwist-results">' | tee -a ${{ matrix.domain }}.html ${{ matrix.domain }}-stable.html > /dev/null
           python3 ./make_table.py ${{ matrix.domain }}-sorted.csv >> ${{ matrix.domain }}.html
           python3 ./make_table.py -f ${{ matrix.domain }}-sorted.csv >> ${{ matrix.domain }}-stable.html
           echo "</table>" | tee -a ${{ matrix.domain }}.html ${{ matrix.domain }}-stable.html > /dev/null
