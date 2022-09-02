@@ -53,6 +53,10 @@ jobs:
         run: |
           docker build -t elceef/dnstwist:phash - < Dockerfile-phash
 
+      - name: Create screenshot directory
+        run: |
+          mkdir ${{ matrix.domain }}-screenshots
+
       - name: Check ${{ matrix.domain }} with dnstwist
         id: dnstwistcheck
         #uses: docker://elceef/dnstwist:phash
@@ -60,7 +64,7 @@ jobs:
         #  entrypoint: /opt/dnstwist/dnstwist.py
         #  args: ${{ matrix.args }} --format csv --output ${{ matrix.domain }}.csv ${{ matrix.domain }}
         run: |
-          docker run --workdir /github/workspace -v "$GITHUB_WORKSPACE":/github/workspace --entrypoint /opt/dnstwist/dnstwist.py elceef/dnstwist:phash ${{ matrix.args }} --format csv --output ${{ matrix.domain }}.csv ${{ matrix.domain }}
+          docker run --workdir /github/workspace -v "$GITHUB_WORKSPACE":/github/workspace --entrypoint /opt/dnstwist/dnstwist.py elceef/dnstwist:phash ${{ matrix.args }} --format csv --phash --screenshots ${{ matrix.domain }}-screenshots/ --output ${{ matrix.domain }}.csv ${{ matrix.domain }}
 
       - name: Failure, verbose inline check of ${{ matrix.domain }} with dnstwist
         if: ${{ failure() && steps.dnstwistcheck.conclusion == 'failure' }}
