@@ -95,8 +95,8 @@ jobs:
           echo "<p><a href=\"index.html\">back to the index</a></p>" >> ${{ matrix.domain }}.html
           echo "<p><a href=\"index-stable.html\">back to the index</a></p>" >> ${{ matrix.domain }}-stable.html
           echo '<table id="dnstwist-results">' | tee -a ${{ matrix.domain }}.html ${{ matrix.domain }}-stable.html > /dev/null
-          python3 ./make_table.py ${{ matrix.domain }}-sorted.csv >> ${{ matrix.domain }}.html
-          python3 ./make_table.py -f ${{ matrix.domain }}-sorted.csv >> ${{ matrix.domain }}-stable.html
+          python3 ./make_table.py    -s ${{ matrix.domain }}-screenshots ${{ matrix.domain }}-sorted.csv >> ${{ matrix.domain }}.html
+          python3 ./make_table.py -f -s ${{ matrix.domain }}-screenshots ${{ matrix.domain }}-sorted.csv >> ${{ matrix.domain }}-stable.html
           echo "</table>" | tee -a ${{ matrix.domain }}.html ${{ matrix.domain }}-stable.html > /dev/null
           echo '</body></html>' | tee -a ${{ matrix.domain }}.html ${{ matrix.domain }}-stable.html > /dev/null
 
@@ -159,6 +159,7 @@ jobs:
         run: |
           mkdir html
           mv */*.html html/
+          mv */*-screenshots html/
           mv index.html html/
           mv index-stable.html html/
           cp style.css html/

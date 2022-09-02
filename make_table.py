@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import csv
 import sys
+import os
 import argparse
 
 unstable_fields = [ 'ssdeep', 'banner_http', 'banner_smtp' ]
@@ -11,6 +12,10 @@ argparser.add_argument('-f', '--filter_unstable',
     help="Filters out unstable fields",
     action="store_true", dest="filter_unstable", default=False,
 )
+argparser.add_argument('-s', '--screenshot_dir',
+    help="Directory with screenshots (optional)",
+    action="store", dest="screenshot_dir",
+)
 argparser.add_argument('csvfile',
     help="CSV file to read",
     action="store",
@@ -18,12 +23,27 @@ argparser.add_argument('csvfile',
 
 args = argparser.parse_args()
 
+check_screenshots = (args.screenshot_dir and os.path.isdir(args.screenshot_dir))
+
 with open(args.csvfile, 'rt') as csvfile:
   reader = csv.reader(csvfile, quotechar='"')
   total_rows = sum(1 for row in reader)
   csvfile.seek(0)
   reader = csv.reader(csvfile, quotechar='"')
   for rowc, row in enumerate(reader):
+    if check_screenshots:
+      if (rowc == 0):
+        row.append("screenshot")
+      else:
+        domain = row[coldesc.index('domain')]
+        screenshots = list(filter(lambda x:x.endswith("_{}.png".format(domain)), os.listdir(args.screenshot_dir)))
+        if len(screenshots)>0:
+          shotlinks = []
+          for shot in screenshots:
+            shotlinks.append('<a href="' + args.screenshot_dir + '/' + shot + '">' + "Screenshot" + '</a>')
+          row.append(' '.join(shotlinks))
+        else:
+          row.append("")
     if (rowc == 0):
       print("<thead>")
       coldesc = row
