@@ -49,9 +49,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Build Docker container with phash features
+        run: |
+          docker build -t elceef/dnstwist:phash - < Dockerfile-phash
+
       - name: Check ${{ matrix.domain }} with dnstwist
         id: dnstwistcheck
-        uses: docker://elceef/dnstwist
+        uses: docker://elceef/dnstwist:phash
         with:
           entrypoint: /opt/dnstwist/dnstwist.py
           args: ${{ matrix.args }} --format csv --output ${{ matrix.domain }}.csv ${{ matrix.domain }}
