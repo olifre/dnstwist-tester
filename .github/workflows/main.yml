@@ -82,9 +82,11 @@ jobs:
           echo "<title>${TITLE}</title></head>" >> ${{ matrix.domain }}.html
           echo "<body><h2>${TITLE}</h2>" >> ${{ matrix.domain }}.html
           echo '<table id="dnstwist-results">' >> ${{ matrix.domain }}.html
+          cp ${{ matrix.domain }}.html ${{ matrix.domain }}-stable.html
           python3 ./make_table.py ${{ matrix.domain }}-sorted.csv >> ${{ matrix.domain }}.html
-          echo "</table>" >> ${{ matrix.domain }}.html
-          echo '</body></html>' >> ${{ matrix.domain }}.html
+          python3 ./make_table.py -f ${{ matrix.domain }}-sorted.csv >> ${{ matrix.domain }}-stable.html
+          echo "</table>" | tee -a ${{ matrix.domain }}.html ${{ matrix.domain }}-stable.html
+          echo '</body></html>' | tee -a ${{ matrix.domain }}.html ${{ matrix.domain }}-stable.html
 
       - name: Upload artifacts for ${{ matrix.domain }}
         uses: actions/upload-artifact@v3
@@ -120,22 +122,28 @@ jobs:
           echo "<h2>${TITLE}</h2>" >> index.html
           echo "<p>This page contains a list of domains checked with <a href=\"https://github.com/elceef/dnstwist\">dnstwist</a> at least daily via GitHub actions.</p>" >> index.html
           echo "<p>To get a domain added, open an issue / PR against the <a href=\"https://github.com/olifre/dnstwist-tester\">GitHub repo</a>.</p>" >> index.html
+          cp index.html index-stable.csv
           for domainData in */*-sorted.csv; do
             fileBase=$(basename $domainData)
             DOMAIN_NAME=${fileBase%-sorted.csv}
-            echo "<h2><a href=\"${DOMAIN_NAME}.html\">${DOMAIN_NAME}</a></h2>" >> index.html
-            echo '<table id="dnstwist-results">' >> index.html
+            echo "<h2><a href=\"${DOMAIN_NAME}.html\">${DOMAIN_NAME}</a></h2>" | tee -a index.html index-stable.html
+            echo '<table id="dnstwist-results">' | tee -a index.html index-stable.html
             python3 ./make_table.py $domainData >> index.html
-            echo "</table>" >> index.html
+            python3 ./make_table.py -f $domainData >> index-stable.html
+            echo "</table>" | tee -a index.html index-stable.html
           done
-          echo '</body></html>' >> index.html
+          echo '</body></html>' | tee -a index.html index-stable.html
+          echo "This is index.html:"
           cat index.html
+          echo "This is index-stable.html:"
+          cat index-stable.html
 
       - name: Move HTML files and style file
         run: |
           mkdir html
           mv */*.html html/
           mv index.html html/
+          mv index-stable.html html/
           cp style.css html/
 
       - name: Deploy
