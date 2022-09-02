@@ -104,7 +104,9 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.domain }}
-          path: ${{ matrix.domain }}*.*
+          path: |
+            ${{ matrix.domain }}*.*
+            ${{ matrix.domain }}-screenshots/
           retention-days: 2
 
   deploy-pages:
