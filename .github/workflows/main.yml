@@ -123,6 +123,10 @@ jobs:
         run: |
           sudo apt-get -y install --no-install-recommends python3-csvkit
 
+      - name: Move screenshot dirs to working directory for referencing in table
+        run: |
+          mv */*-screenshots .
+
       - name: Create a merged HTML
         run: |
           TITLE="dnstwist-tester results, last updated at $(date)"
@@ -145,8 +149,8 @@ jobs:
             echo "<h2><a href=\"${DOMAIN_NAME}.html\">${DOMAIN_NAME}</a></h2>" >> index.html
             echo "<h2><a href=\"${DOMAIN_NAME}-stable.html\">${DOMAIN_NAME}</a></h2>" >> index-stable.html
             echo '<table id="dnstwist-results">' | tee -a index.html index-stable.html > /dev/null
-            python3 ./make_table.py $domainData >> index.html
-            python3 ./make_table.py -f $domainData >> index-stable.html
+            python3 ./make_table.py    -s "${DOMAIN_NAME}-screenshots" $domainData >> index.html
+            python3 ./make_table.py -f -s "${DOMAIN_NAME}-screenshots" $domainData >> index-stable.html
             echo "</table>" | tee -a index.html index-stable.html > /dev/null
           done
           echo '</body></html>' | tee -a index.html index-stable.html > /dev/null
@@ -159,7 +163,7 @@ jobs:
         run: |
           mkdir html
           mv */*.html html/
-          mv */*-screenshots html/
+          mv ./*-screenshots html/
           mv index.html html/
           mv index-stable.html html/
           cp style.css html/
