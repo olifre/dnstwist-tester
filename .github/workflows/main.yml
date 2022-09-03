@@ -97,7 +97,7 @@ jobs:
           echo '<div id="dnstwist-results-block">' | tee -a ${{ matrix.domain }}.html ${{ matrix.domain }}-stable.html > /dev/null
           echo '<table id="dnstwist-results">' | tee -a ${{ matrix.domain }}.html ${{ matrix.domain }}-stable.html > /dev/null
           python3 ./make_table.py    -s ${{ matrix.domain }}-screenshots ${{ matrix.domain }}-sorted.csv >> ${{ matrix.domain }}.html
-          python3 ./make_table.py -f -s ${{ matrix.domain }}-screenshots ${{ matrix.domain }}-sorted.csv >> ${{ matrix.domain }}-stable.html
+          python3 ./make_table.py -f    ${{ matrix.domain }}-screenshots ${{ matrix.domain }}-sorted.csv >> ${{ matrix.domain }}-stable.html
           echo "</table>" | tee -a ${{ matrix.domain }}.html ${{ matrix.domain }}-stable.html > /dev/null
           echo "</div>" | tee -a ${{ matrix.domain }}.html ${{ matrix.domain }}-stable.html > /dev/null
           echo '</body></html>' | tee -a ${{ matrix.domain }}.html ${{ matrix.domain }}-stable.html > /dev/null
@@ -154,7 +154,7 @@ jobs:
             echo '<div id="dnstwist-results-block">' | tee -a index.html index-stable.html > /dev/null
             echo '<table id="dnstwist-results">' | tee -a index.html index-stable.html > /dev/null
             python3 ./make_table.py    -s "${DOMAIN_NAME}-screenshots" $domainData >> index.html
-            python3 ./make_table.py -f -s "${DOMAIN_NAME}-screenshots" $domainData >> index-stable.html
+            python3 ./make_table.py -f    "${DOMAIN_NAME}-screenshots" $domainData >> index-stable.html
             echo "</table>" | tee -a index.html index-stable.html > /dev/null
             echo "</div>" | tee -a index.html index-stable.html > /dev/null
           done
