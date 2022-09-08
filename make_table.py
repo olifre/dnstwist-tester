@@ -4,7 +4,7 @@ import sys
 import os
 import argparse
 
-unstable_fields = [ 'ssdeep', 'banner_http', 'banner_smtp', 'phash' ]
+unstable_fields = [ 'ssdeep', 'banner_http', 'banner_smtp', 'phash', 'whois_created', 'whois_registrar' ]
 
 argparser = argparse.ArgumentParser(description='CSV to HTML table formatting tool for dnstwist output.')
 
