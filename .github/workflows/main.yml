@@ -49,9 +49,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Build Docker container with phash features
-        run: |
-          docker build -t elceef/dnstwist:phash - < Dockerfile-phash
+      #- name: Build Docker container with phash features
+      #  run: |
+      #    docker build -t elceef/dnstwist:phash - < Dockerfile-phash
 
       - name: Create screenshot directory
         run: |
