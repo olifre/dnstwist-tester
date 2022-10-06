@@ -68,10 +68,12 @@ jobs:
 
       - name: Failure, verbose inline check of ${{ matrix.domain }} with dnstwist
         if: ${{ failure() && steps.dnstwistcheck.conclusion == 'failure' }}
-        uses: docker://elceef/dnstwist
-        with:
-          entrypoint: /opt/dnstwist/dnstwist.py
-          args: ${{ matrix.args }} ${{ matrix.domain }}
+        #uses: docker://elceef/dnstwist
+        #with:
+        #  entrypoint: /opt/dnstwist/dnstwist.py
+        #  args: ${{ matrix.args }} ${{ matrix.domain }}
+        run: |
+          docker run -t --workdir /github/workspace -v "$GITHUB_WORKSPACE":/github/workspace --entrypoint /opt/dnstwist/dnstwist.py elceef/dnstwist:phash ${{ matrix.args }} --phash --screenshots ${{ matrix.domain }}-screenshots/ ${{ matrix.domain }}
 
       - name: Sort CSV of ${{ matrix.domain }} for stable ordering
         run: |
