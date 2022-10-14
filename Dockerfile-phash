@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 FROM elceef/dnstwist:latest
 
 RUN apt-get update && \
