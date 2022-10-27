@@ -29,13 +29,9 @@ jobs:
         id: read-json
         shell: bash
         run: |
-          CHECK_DOMAINS="$(cat .github/workflows/check_domains.json)"
-          # See https://github.community/t/set-output-truncates-multiline-strings/16852/3
-          CHECK_DOMAINS="${CHECK_DOMAINS//'%'/'%25'}"
-          CHECK_DOMAINS="${CHECK_DOMAINS//$'\n'/'%0A'}"
-          CHECK_DOMAINS="${CHECK_DOMAINS//$'\r'/'%0D'}"
-          echo $CHECK_DOMAINS
-          echo "::set-output name=CHECK_DOMAINS::$CHECK_DOMAINS"
+          echo 'CHECK_DOMAINS<<EOT' >> $GITHUB_OUTPUT
+          cat .github/workflows/check_domains.json >> $GITHUB_OUTPUT
+          echo 'EOT' >> $GITHUB_OUTPUT
 
   check-dnstwists:
     needs: [ collect-domains ]
