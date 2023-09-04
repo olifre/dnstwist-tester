@@ -23,7 +23,7 @@ jobs:
       check_domains: ${{ steps.read-json.outputs.CHECK_DOMAINS }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Read from JSON
         id: read-json
@@ -43,7 +43,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       #- name: Build Docker container with phash features
       #  run: |
@@ -114,7 +114,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Download all workflow run artifacts
         uses: actions/download-artifact@v3
