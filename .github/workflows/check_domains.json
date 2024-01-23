@@ -5,7 +5,8 @@
  },
  {
    "domain": "www.universitaet-bonn.de",
-   "args": "--registered --all --banners --mxcheck --geoip --whois --tld /opt/dnstwist/dictionaries/common_tlds.dict"
+   "args": "--registered --all --banners --mxcheck --geoip --whois --tld /opt/dnstwist/dictionaries/common_tlds.dict",
+   "disabled": true
  },
  {
    "domain": "sciebo.de",
