@@ -25,12 +25,17 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install jq for JSON filtering
+        shell: bash
+        run: |
+          sudo apt-get -y install --no-install-recommends jq
+
       - name: Read from JSON
         id: read-json
         shell: bash
         run: |
           echo 'CHECK_DOMAINS<<EOT' >> $GITHUB_OUTPUT
-          cat .github/workflows/check_domains.json >> $GITHUB_OUTPUT
+          cat .github/workflows/check_domains.json | jq -r '. | map(select(.disabled|not))' >> $GITHUB_OUTPUT
           echo 'EOT' >> $GITHUB_OUTPUT
 
   check-dnstwists:
