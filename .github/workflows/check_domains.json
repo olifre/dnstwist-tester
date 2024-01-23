@@ -6,8 +6,8 @@
  },
  {
    "domain": "www.universitaet-bonn.de",
-   "args": "--registered --all --banners --mxcheck --geoip --whois --lsh ssdeep --lsh-url https://www.uni-bonn.de --tld /opt/dnstwist/dictionaries/common_tlds.dict",
-   "disabled": true
+   "args": "--registered --all --banners --mxcheck --geoip --whois --lsh ssdeep --lsh-url https://www.uni-bonn.de --phash-url https://www.uni-bonn.de --tld /opt/dnstwist/dictionaries/common_tlds.dict",
+   "disabled": false
  },
  {
    "domain": "sciebo.de",
