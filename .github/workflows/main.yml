@@ -177,7 +177,7 @@ jobs:
           cp style.css html/
 
       - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         if: |
             (github.event_name == 'create' && github.event.ref_type == 'tag' && endsWith(github.event.ref, '/main'))
             || (github.event_name == 'push' && endsWith(github.event.ref, '/main'))
