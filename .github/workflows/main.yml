@@ -58,6 +58,18 @@ jobs:
         run: |
           mkdir ${{ matrix.domain }}-screenshots
 
+      - name: Create dnstwist launcher script
+        run: |
+          LAUNCHER="${GITHUB_WORKSPACE}"/launch_dnstwist.sh
+          echo "#!/bin/bash" > "${LAUNCHER}"
+          echo "cat /opt/dnstwist/dictionaries/*_tlds.dict > /opt/dnstwist/dictionaries/common_and_abused_tlds.dict" >> "${LAUNCHER}"
+          echo 'exec /opt/dnstwist/dnstwist.py "$@"' >> "${LAUNCHER}"
+          chmod +x "${LAUNCHER}"
+          echo "Generated launcher ${LAUNCHER} with content:"
+          echo "***"
+          cat "${LAUNCHER}"
+          echo "***"
+
       - name: Check ${{ matrix.domain }} with dnstwist
         id: dnstwistcheck
         #uses: docker://elceef/dnstwist:phash
@@ -65,7 +77,7 @@ jobs:
         #  entrypoint: /opt/dnstwist/dnstwist.py
         #  args: ${{ matrix.args }} --format csv --output ${{ matrix.domain }}.csv ${{ matrix.domain }}
         run: |
-          docker run --workdir /github/workspace -v "$GITHUB_WORKSPACE":/github/workspace --entrypoint /opt/dnstwist/dnstwist.py elceef/dnstwist:phash ${{ matrix.args }} --format csv --phash --screenshots ${{ matrix.domain }}-screenshots/ --output ${{ matrix.domain }}.csv ${{ matrix.domain }}
+          docker run --workdir /github/workspace -v "${GITHUB_WORKSPACE}":/github/workspace --entrypoint /github/workspace/launch_dnstwist.sh elceef/dnstwist:phash ${{ matrix.args }} --format csv --phash --screenshots ${{ matrix.domain }}-screenshots/ --output ${{ matrix.domain }}.csv ${{ matrix.domain }}
 
       - name: Failure, verbose inline check of ${{ matrix.domain }} with dnstwist
         if: ${{ failure() && steps.dnstwistcheck.conclusion == 'failure' }}
@@ -74,7 +86,7 @@ jobs:
         #  entrypoint: /opt/dnstwist/dnstwist.py
         #  args: ${{ matrix.args }} ${{ matrix.domain }}
         run: |
-          docker run -t --workdir /github/workspace -v "$GITHUB_WORKSPACE":/github/workspace --entrypoint /opt/dnstwist/dnstwist.py elceef/dnstwist:phash ${{ matrix.args }} --phash --screenshots ${{ matrix.domain }}-screenshots/ ${{ matrix.domain }}
+          docker run -t --workdir /github/workspace -v "${GITHUB_WORKSPACE}":/github/workspace --entrypoint /github/workspace/launch_dnstwist.sh elceef/dnstwist:phash ${{ matrix.args }} --phash --screenshots ${{ matrix.domain }}-screenshots/ ${{ matrix.domain }}
 
       - name: Sort CSV of ${{ matrix.domain }} for stable ordering
         run: |
