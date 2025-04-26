@@ -1,0 +1,20 @@
+name: Keepalive
+
+on:
+  schedule:
+    - cron: '42 3 27 * *'
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  keepalive:
+    name: Keepalive
+    # Only run cron on the olifre account
+    if: (github.event_name == 'schedule' && github.repository_owner == 'olifre') || (github.event_name != 'schedule')
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - name: Keepalive
+        uses: silverstripe/gha-keepalive@v1
