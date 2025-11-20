@@ -23,7 +23,7 @@ jobs:
       check_domains: ${{ steps.read-json.outputs.CHECK_DOMAINS }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Install jq for JSON filtering
         shell: bash
@@ -48,7 +48,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       #- name: Build Docker container with phash features
       #  run: |
@@ -131,7 +131,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Download all workflow run artifacts
         uses: actions/download-artifact@v6
