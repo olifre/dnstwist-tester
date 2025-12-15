@@ -118,7 +118,7 @@ jobs:
           echo '</body></html>' | tee -a ${{ matrix.domain }}.html ${{ matrix.domain }}-stable.html > /dev/null
 
       - name: Upload artifacts for ${{ matrix.domain }}
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ matrix.domain }}
           path: |
