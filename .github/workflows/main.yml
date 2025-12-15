@@ -134,7 +134,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Download all workflow run artifacts
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
 
       - name: Install dependencies for CSV parsing
         run: |
