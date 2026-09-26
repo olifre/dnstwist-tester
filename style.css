@@ -1,0 +1,32 @@
+/* SPDX-License-Identifier: GPL-3.0-or-later */
+
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  border-left: none;
+  border-right: none;
+}
+th, td {
+  padding: 5px;
+}
+th {
+  background-color: #A9A9A9;
+  color: #000;
+}
+table tr:nth-child(odd) {
+  background: #CCC;
+}
+thead {
+  border-top: 2px solid black;
+  border-bottom: 2px solid black;
+}
+tbody {
+  border-top: 2px solid black;
+  border-bottom: 2px solid black;
+}
+@media only screen and (max-width: 800px) {
+  #dnstwist-results-block {
+    /* Add scrolling on mobile devices. */
+    overflow-x: auto;
+  }
+}
